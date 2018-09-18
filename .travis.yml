@@ -5,18 +5,12 @@ sudo: false
 python:
   - 3.6 
 
-env:
-  - JHUB_VER=0.9.1
-
 branches:
   only:
   - travis
 
-before_install:
-  - git clone --quiet --branch $JHUB_VER https://github.com/jupyter/jupyterhub.git jupyterhub
-
 install:
-  - pip install --pre -e jupyterhub
+  - pip install -r requirements.txt
 
 script:
   - pytest
