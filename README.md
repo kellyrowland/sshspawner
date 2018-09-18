@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kellyrowland/sshspawner.svg?branch=travis](https://travis-ci.org/kellyrowland/sshspawner)
+[![Build Status](https://travis-ci.org/kellyrowland/sshspawner.svg?branch=travis)](https://travis-ci.org/kellyrowland/sshspawner)
 
 # sshspawner
 
