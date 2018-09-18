@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/kellyrowland/sshspawner.svg?branch=master)](https://travis-ci.org/kellyrowland/sshspawner)
 
 # sshspawner
 
