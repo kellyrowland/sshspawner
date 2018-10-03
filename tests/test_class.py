@@ -1,60 +1,50 @@
 import asyncio
-import pytest
-from jupyterhub.objects import Hub
-from sshspawner.sshspawner import SSHSpawner
 import mockssh
+import pytest
+from jupyterhub import orm
+from jupyterhub.objects import Hub, Server
+from jupyterhub.spawner import Spawner
+from jupyterhub.user import User
 from pytest import fixture, yield_fixture
-from jupyterhub.objects import Hub
 from sshspawner.sshspawner import SSHSpawner
 
-@yield_fixture()
+@yield_fixture(scope= "session")
 def server():
     users = {
                 "testuser": "tests/sample-user-key"
             }
-    socket = 80
     with mockssh.Server(users) as s:
         yield s
 
+@fixture(scope= "session")
+def spawner(server):
+    ssh_spawner = SSHSpawner()
+    ssh_spawner.hub = Hub()
+    ssh_spawner.hub.public_host = server.host
+    ssh_spawner.remote_hosts = server.host.split()
+    ssh_spawner.user = orm.User(name = list(server.users)[0])
+    ssh_spawner.user.server = Server()
+    return ssh_spawner
+
 class TestSSHSpawner:
-    @fixture()
-    def spawner(self,server):
-        self.SSHSpawner = SSHSpawner()
-        SSHSpawner.hub = Hub()
-        for uid in server.users:
-            SSHSpawner.user.name = uid
-
-    def test_server(self,server,spawner):
-        assert(SSHSpawner.user.name == "testuser")
-        for uid in server.users:
-            with server.client(uid) as c:
-                port = SSHSpawner.remote_port.default_value
-        #         loop = asyncio.get_event_loop()
-        #         random_port = loop.run_until_complete(SSHSpawner.remote_random_port())
-        #         assert(port == 80)
+    def test_start(self,server,spawner):
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(spawner.start())
+        port = spawner.remote_port
+        host = spawner.remote_host
         assert(port == "22")
-        SSHSpawner.hub.public_host = server.host
-        assert(SSHSpawner.hub.public_host == "127.0.0.1")
+        assert(host == "127.0.0.1")
+        assert(spawner.user.name == "testuser")
 
-    def test_remote(self,server,spawner):
-        assert(True)
-        # SSHSpawner.remote_hosts = server.host.split()
-        # loop = asyncio.get_event_loop()
-        # loop.run_until_complete(SSHSpawner.start(self))
-        # SSHSpawner.user.server = server()
-        # SSHSpawner.user.name = server.users
-        # SSHSpawner.user.url = "127.0.0.1"
-        # port = self.SSHSpawner.remote_port
-        # host = self.SSHSpawner.remote_host
-        # random_port = loop.run_until_complete(self.SSHSpawner.remote_random_port())
-        # assert(port == "22")
-        # assert(host == "127.0.0.1")
-        # assert(random_port == 80)
-        # assert(SSHSpawner.user.name == "testuser")
+    def test_env(self,server,spawner):
+        spawner.user.server.cookie_name = "testcookie"
+        spawner.user.url = "http://www.example.com/"
+        env = spawner.user_env()
+        assert(env['JPY_USER'] == "testuser")
+        assert(env['JPY_COOKIE_NAME'] == "testcookie")
+        assert(env['PATH'] == "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin")
 
-    def test_env(self,spawner):
+    def test_random_port(self,server,spawner):
+        loop = asyncio.get_event_loop()
+        random_port = loop.run_until_complete(spawner.remote_random_port())
         assert(True)
-        # env = SSHSpawner.user_env()
-        # assert(env['JPY_USER'] == "testuser")
-        # assert(env['JPY_COOKIE_NAME'] == "testcookie")
-        # assert(env['PATH'] == "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin")
