@@ -46,6 +46,9 @@ setup_args = dict(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
+    scripts=[
+    			'scripts/get_port'
+    		],
 )
 
 # setuptools requirements
