@@ -82,11 +82,11 @@ def ip(address=("8.8.8.8", 80)):
 def main():
     setup(**setup_args)
 
-    args = parse_arguments()
-    if args.ip:
-        print("{} {}".format(port(), ip()))
-    else:
-        print(port())
+    # args = parse_arguments()
+    # if args.ip:
+    #     print("{} {}".format(port(), ip()))
+    # else:
+    #     print(port())
 
 if __name__ == '__main__':
     main()
