@@ -46,9 +46,11 @@ setup_args = dict(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
-    console_scripts=[
-        'get_port=scripts/get_port.__main__:main',
-    ],
+    entry_points = {
+    	console_scripts=[
+        	'get_port=scripts/get_port.__main__:main',
+    	],
+    }
 )
 
 # setuptools requirements
