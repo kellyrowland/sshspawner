@@ -47,7 +47,7 @@ setup_args = dict(
         'Programming Language :: Python :: 3',
     ],
     entry_points = {
-    	'console_scripts' : ['get_port=scripts.get_port:main'],
+    	'console_scripts' : ['get_port=sshspawner.get_port:main'],
     }
 )
 
