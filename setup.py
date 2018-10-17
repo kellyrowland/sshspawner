@@ -47,9 +47,7 @@ setup_args = dict(
         'Programming Language :: Python :: 3',
     ],
     entry_points = {
-    	console_scripts=[
-        	'get_port=scripts/get_port.__main__:main',
-    	],
+    	'console_scripts' : ['get_port=scripts/get_port.__main__:main'],
     }
 )
 
