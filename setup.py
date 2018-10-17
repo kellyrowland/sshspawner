@@ -47,7 +47,7 @@ setup_args = dict(
         'Programming Language :: Python :: 3',
     ],
     scripts=[
-    			'scripts/get_port'
+    			'scripts/get_port.py'
     		],
 )
 
