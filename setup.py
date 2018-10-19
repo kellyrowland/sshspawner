@@ -9,9 +9,8 @@
 # ----------------------------------------------------------------------------
 from __future__ import print_function
 
-import argparse
 import os
-import socket
+import setuptools
 import sys
 
 from distutils.core import setup
